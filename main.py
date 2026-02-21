@@ -9,14 +9,14 @@ resend.api_key = "re_Kt1sqzZ4_3N9hxXX1mCEkvRMyEZuhZS83"
 
 st.set_page_config(page_title="AAPL Alpha Alerter", page_icon="📈", layout="centered")
 
-# Custom CSS to make the Streamlit background dark to match the chart
+# Custom CSS to make the Streamlit background dark
 st.markdown("""
     <style>
-    .main {
+    .stApp {
         background-color: #0e1117;
     }
     </style>
-    """, unsafe_allow_texts=True)
+    """, unsafe_allow_html=True) # Changed from allow_texts to allow_html
 
 st.title("🍎 AAPL Automated Stock Alerter")
 

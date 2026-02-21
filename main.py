@@ -15,7 +15,7 @@ def send_email_alert(ticker, current_price, change_percent):
     try:
         resend.Emails.send({
             "from": "onboarding@resend.dev",
-            "to": "YOUR_EMAIL_HERE@gmail.com", # <--- DOUBLE CHECK THIS IS YOUR EMAIL
+            "to": "28rafaelg@his.ac.zw", # <--- DOUBLE CHECK THIS IS YOUR EMAIL
             "subject": f"🚨 {ticker} Movement Alert: {change_percent:.2%}",
             "html": f"<h3>Stock Alert</h3><p>{ticker} moved {change_percent:.2%}. Price: ${current_price:.2f}</p>"
         })

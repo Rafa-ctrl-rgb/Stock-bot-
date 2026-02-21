@@ -42,12 +42,12 @@ def check_stock():
     fig.tight_layout()
     canvas.draw()
 
-# Streamlit Web Interface (Replaces your GUI setup)
+# Streamlit Web Interface 
 st.title("AAPL Stock Alert Bot")
 
-# This creates the buttons and text on your website
+# buttons and texts on the website
 if st.button('Check Now'):
-    # This runs your logic and displays the result
+    # This runs the logic and displays the result
     st.write("Fetching latest data...")
     
     # Simple display metrics
@@ -55,7 +55,7 @@ if st.button('Check Now'):
     col1.metric("Price", f"${data['Close'].iloc[-1]:.2f}")
     col2.metric("Volume", f"{data['Volume'].iloc[-1]:,}")
     
-    # Display your chart
+    # Display the chart
     st.pyplot(fig)
 else:
     st.write("Click the button to refresh data.")
@@ -66,5 +66,11 @@ ax = fig.add_subplot(111)
 
 st.pyplot(fig)
 
-root.mainloop()
+# data and chart code 
+
+# tells the website to display the chart
+st.pyplot(fig)
+
+# This displays the price
+st.write(f"The current price of AAPL is: ${data['Close'].iloc[-1]:.2f}")
 

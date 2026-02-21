@@ -7,7 +7,17 @@ import resend
 # 1. API Setup
 resend.api_key = "re_Kt1sqzZ4_3N9hxXX1mCEkvRMyEZuhZS83"
 
-st.set_page_config(page_title="AAPL Alpha Alerter", page_icon="📈")
+st.set_page_config(page_title="AAPL Alpha Alerter", page_icon="📈", layout="centered")
+
+# Custom CSS to make the Streamlit background dark to match the chart
+st.markdown("""
+    <style>
+    .main {
+        background-color: #0e1117;
+    }
+    </style>
+    """, unsafe_allow_texts=True)
+
 st.title("🍎 AAPL Automated Stock Alerter")
 
 # 2. Function to send the email
@@ -15,7 +25,7 @@ def send_email_alert(ticker, current_price, change_percent):
     try:
         resend.Emails.send({
             "from": "onboarding@resend.dev",
-            "to": "YOUR_EMAIL_HERE@gmail.com", # <--- DOUBLE CHECK THIS IS YOUR EMAIL
+            "to": "YOUR_EMAIL_HERE@gmail.com", # <--- CHANGE THIS
             "subject": f"🚨 {ticker} Movement Alert: {change_percent:.2%}",
             "html": f"<h3>Stock Alert</h3><p>{ticker} moved {change_percent:.2%}. Price: ${current_price:.2f}</p>"
         })
@@ -35,32 +45,23 @@ if not data.empty and len(data) >= 2:
     yesterday_price = float(data["Close"].iloc[-2])
     change_percent = (current_price - yesterday_price) / yesterday_price
 
-    # 4. Display Metrics
+    # 4. Metrics
     col1, col2 = st.columns(2)
     col1.metric("Current Price", f"${current_price:.2f}")
     col2.metric("Daily Change", f"{change_percent:.2%}", delta=f"{change_percent:.2%}")
 
-    # --- 5. THE CHART (The missing piece!) ---
+    # --- 5. THE FANCY DARK CHART ---
     st.subheader("Price Trend (Past 30 Days)")
-    fig, ax = plt.subplots(figsize=(10, 4))
     
-    # Pick color based on performance
-    line_color = 'green' if change_percent > 0 else 'red'
+    # Set the dark theme
+    plt.style.use('dark_background')
+    fig, ax = plt.subplots(figsize=(10, 5))
     
-    ax.plot(data.index, data['Close'], color=line_color, linewidth=2)
-    ax.fill_between(data.index, data['Close'], alpha=0.1, color=line_color) # Adds a nice shading
-    ax.set_ylabel("Price ($)")
-    plt.xticks(rotation=45)
+    # Choose color: Electric Green or Neon Red
+    color = '#00ff88' if change_percent > 0 else '#ff4b4b'
     
-    st.pyplot(fig) 
-    # ------------------------------------------
-
-    # 6. The Logic Trigger
-    if st.button('Run Manual Scan & Test Email'):
-        if abs(change_percent) > 0.02:
-            st.warning(f"Significant movement ({change_percent:.2%}). Sending email...")
-            send_email_alert(ticker, current_price, change_percent)
-        else:
-            st.info(f"Movement is {change_percent:.2%}. Threshold for email is 2%.")
-else:
-    st.error("Waiting for market data...")
+    # Plot the line with a slight glow
+    ax.plot(data.index, data['Close'], color=color, linewidth=2.5, alpha=0.9)
+    
+    # Add a gradient-style area fill
+    ax.fill_between(data.index, data['Close'], min(data['Close

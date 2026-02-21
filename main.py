@@ -50,12 +50,14 @@ if st.button('Check Now'):
     # This runs the logic and displays the result
     st.write("Fetching latest data...")
     
-    # Simple display metrics
-    col1, col2 = st.columns(2)
-    col1.metric("Price", f"${data['Close'].iloc[-1]:.2f}")
-    col2.metric("Volume", f"{data['Volume'].iloc[-1]:,}")
+   # Use .item() or .values[-1] to get just the single number
+last_price = data['Close'].iloc[-1].item()
+last_volume = data['Volume'].iloc[-1].item()
+
+col1.metric("Price", f"${last_price:.2f}")
+col2.metric("Volume", f"{last_volume:,.0f}")
     
-    # Display the chart
+# Display the chart
     st.pyplot(fig)
 else:
     st.write("Click the button to refresh data.")

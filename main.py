@@ -2,15 +2,8 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import subprocess
-import tkinter as tk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
-def mac_notification(title, text):
-    subprocess.call([
-        "osascript", "-e",
-        f'display notification "{text}" with title "{title}"'
-    ])
 
 def check_stock():
     ticker = "AAPL"

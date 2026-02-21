@@ -1,9 +1,9 @@
 import streamlit as st
 import yfinance as yf
 import pandas as pd
-import subprocess
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 def check_stock():
     ticker = "AAPL"

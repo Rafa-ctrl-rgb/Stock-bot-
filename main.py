@@ -42,25 +42,24 @@ def check_stock():
     fig.tight_layout()
     canvas.draw()
 
-# GUI setup
-root = tk.Tk()
-root.title("AAPL Stock Alert Bot")
+# Streamlit Web Interface (Replaces your GUI setup)
+st.title("AAPL Stock Alert Bot")
 
-price_label = tk.Label(root, text="Price: --")
-price_label.pack()
-
-change_label = tk.Label(root, text="Change: --")
-change_label.pack()
-
-volume_label = tk.Label(root, text="Volume: --")
-volume_label.pack()
-
-status_label = tk.Label(root, text="Status: --")
-status_label.pack()
-
-check_button = tk.Button(root, text="Check Now", command=check_stock)
-check_button.pack()
-
+# This creates the buttons and text on your website
+if st.button('Check Now'):
+    # This runs your logic and displays the result
+    st.write("Fetching latest data...")
+    
+    # Simple display metrics
+    col1, col2 = st.columns(2)
+    col1.metric("Price", f"${data['Close'].iloc[-1]:.2f}")
+    col2.metric("Volume", f"{data['Volume'].iloc[-1]:,}")
+    
+    # Display your chart
+    st.pyplot(fig)
+else:
+    st.write("Click the button to refresh data.")
+    
 # Mini chart setup
 fig = Figure(figsize=(7, 3.5), dpi=100)
 ax = fig.add_subplot(111)

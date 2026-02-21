@@ -71,6 +71,6 @@ st.pyplot(fig)
 # tells the website to display the chart
 st.pyplot(fig)
 
-# This displays the price
-st.write(f"The current price of AAPL is: ${data['Close'].iloc[-1]:.2f}")
-
+# Values to make we got the numbers 
+current_price = data['Close'].values[-1]
+st.write(f"The current price of AAPL is: ${current_price:.2f}")

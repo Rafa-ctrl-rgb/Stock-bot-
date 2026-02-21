@@ -64,4 +64,4 @@ if not data.empty and len(data) >= 2:
     ax.plot(data.index, data['Close'], color=color, linewidth=2.5, alpha=0.9)
     
     # Add a gradient-style area fill
-    ax.fill_between(data.index, data['Close'], min(data['Close
+    ax.fill_between(data.index, data['Close'], min(data['Close']), color=color, alpha=0.15)

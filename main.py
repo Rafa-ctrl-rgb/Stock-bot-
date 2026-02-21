@@ -57,6 +57,14 @@ last_volume = data['Volume'].iloc[-1].item()
 col1.metric("Price", f"${last_price:.2f}")
 col2.metric("Volume", f"{last_volume:,.0f}")
     
+# Look at the spacing here:
+if st.button('Check Now'):
+    st.write("Fetching latest data...")
+    
+    col1, col2 = st.columns(2)
+    col1.metric("Price", f"${last_price:.2f}")
+    col2.metric("Volume", f"{last_volume:,.0f}")
+    
 # Display the chart
     st.pyplot(fig)
 else:

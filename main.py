@@ -64,8 +64,7 @@ else:
 fig = Figure(figsize=(7, 3.5), dpi=100)
 ax = fig.add_subplot(111)
 
-canvas = FigureCanvasTkAgg(fig, master=root)
-canvas.get_tk_widget().pack()
+st.pyplot(fig)
 
 root.mainloop()
 

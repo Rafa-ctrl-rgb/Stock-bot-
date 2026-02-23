@@ -3,6 +3,7 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 import resend
+import re
 
 # 1. API Setup
 resend.api_key = "re_Kt1sqzZ4_3N9hxXX1mCEkvRMyEZuhZS83"
@@ -10,16 +11,24 @@ resend.api_key = "re_Kt1sqzZ4_3N9hxXX1mCEkvRMyEZuhZS83"
 st.set_page_config(page_title="AAPL Alpha Alerter", page_icon="📈")
 st.title("🍎 AAPL Automated Stock Alerter")
 
-# 2. Function to send the email
-def send_email_alert(ticker, current_price, change_percent):
+# --- NEW: User Email Subscription Section ---
+st.sidebar.header("Subscribe to Alerts")
+user_email = st.sidebar.text_input("Enter your email to receive alerts:", placeholder="yourname@example.com")
+
+def is_valid_email(email):
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
+# --------------------------------------------
+
+# 2. Function to send the email (Updated to accept recipient)
+def send_email_alert(ticker, current_price, change_percent, recipient_email):
     try:
         resend.Emails.send({
             "from": "onboarding@resend.dev",
-            "to": "28rafaelg@his.ac.zw", # <--- DOUBLE CHECK THIS IS YOUR EMAIL
+            "to": recipient_email, 
             "subject": f"🚨 {ticker} Movement Alert: {change_percent:.2%}",
             "html": f"<h3>Stock Alert</h3><p>{ticker} moved {change_percent:.2%}. Price: ${current_price:.2f}</p>"
         })
-        st.success("📩 Alert email sent!")
+        st.success(f"📩 Alert email sent to {recipient_email}!")
     except Exception as e:
         st.error(f"Email failed: {e}")
 
@@ -40,27 +49,25 @@ if not data.empty and len(data) >= 2:
     col1.metric("Current Price", f"${current_price:.2f}")
     col2.metric("Daily Change", f"{change_percent:.2%}", delta=f"{change_percent:.2%}")
 
-    # --- 5. THE CHART (The missing piece!) ---
+    # 5. The Chart
     st.subheader("Price Trend (Past 30 Days)")
     fig, ax = plt.subplots(figsize=(10, 4))
-    
-    # Pick color based on performance
     line_color = 'green' if change_percent > 0 else 'red'
-    
     ax.plot(data.index, data['Close'], color=line_color, linewidth=2)
-    ax.fill_between(data.index, data['Close'], alpha=0.1, color=line_color) # Adds a nice shading
+    ax.fill_between(data.index, data['Close'], alpha=0.1, color=line_color)
     ax.set_ylabel("Price ($)")
     plt.xticks(rotation=45)
-    
     st.pyplot(fig) 
-    # ------------------------------------------
 
-    # 6. The Logic Trigger
+    # 6. The Logic Trigger (Updated)
     if st.button('Run Manual Scan & Test Email'):
-        if abs(change_percent) > 0.02:
+        if not user_email or not is_valid_email(user_email):
+            st.warning("Please enter a valid email address in the sidebar first!")
+        elif abs(change_percent) > 0.02:
             st.warning(f"Significant movement ({change_percent:.2%}). Sending email...")
-            send_email_alert(ticker, current_price, change_percent)
+            send_email_alert(ticker, current_price, change_percent, user_email)
         else:
-            st.info(f"Movement is {change_percent:.2%}. Threshold for email is 2%.")
+            st.info(f"Movement is {change_percent:.2%}. Threshold for email is 2%. (Sending test anyway...)")
+            send_email_alert(ticker, current_price, change_percent, user_email)
 else:
     st.error("Waiting for market data...")

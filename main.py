@@ -55,4 +55,23 @@ if not data.empty and len(data) >= 2:
     
     # color line green for up, red for down
     line_color = 'green' if change_percent > 0 else 'red'
-    ax.plot(data.index, data)
+    ax.plot(data.index, data['Close'], color=line_color, linewidth=2)
+    ax.fill_between(data.index, data['Close'], alpha=0.1, color=line_color)
+    ax.set_ylabel("Price ($)")
+    plt.xticks(rotation=45)
+    st.pyplot(fig) 
+
+    # manual scan and email trigger
+    if st.button('Run Manual Scan & Test Email'):
+        if not user_email or not is_valid_email(user_email):
+            st.warning("Please enter a valid email address in the sidebar first!")
+        elif abs(change_percent) > 0.02:
+            st.warning(f"Significant movement ({change_percent:.2%}). Sending email...")
+            send_email_alert(ticker, current_price, change_percent, user_email)
+        else:
+            st.info(f"Movement is {change_percent:.2%}. Threshold for email is 2%. (Sending test anyway...)")
+            send_email_alert(ticker, current_price, change_percent, user_email)
+else:
+    st.error("Waiting for market data...")
+
+

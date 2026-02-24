@@ -55,4 +55,4 @@ if not data.empty and len(data) >= 2:
     
     # color line green for up, red for down
     line_color = 'green' if change_percent > 0 else 'red'
-    ax.plot(data.index, data
+    ax.plot(data.index, data)

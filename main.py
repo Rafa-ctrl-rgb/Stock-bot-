@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import resend
 import re
 
-# TODO: move this to st.secrets before pushing to github!
 resend.api_key = "re_Kt1sqzZ4_3N9hxXX1mCEkvRMyEZuhZS83"
 
 st.set_page_config(page_title="AAPL Alpha Alerter", page_icon="📈")
